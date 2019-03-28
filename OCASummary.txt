@@ -1,0 +1,808 @@
+компиляция и запуск приложения :
+javac <ClassName>.java
+java <ClassName>
+_______________________________________________________________________________
+
+public static void main(String[] args) {}
+public static void main(String args[]) {}
+public static void main(String... args) {}
+
+public class Foo {
+  public Foo() { }
+  public static void main(String args[]) {
+    Foo foo = new Foo();
+  }
+}
+
+имена переменных, методов, классов могут содержать, начинаться с _ , $
+
+сигнатура метода  -  его название и список аргументов
+
+пакет java.lang импортируется автоматически
+
+protected void finilize()  -  аналог деструктора. Может быть вызван
+   не более 1 раза для конкретного объекта в отдельном процессе. Не 
+   рекомендуется использовать на практике.
+
+System.out.print()           \n 
+System.out.println()
+System.out.format()          %d %f ...
+
+java автоматически вызывает toString() метод объекта при попытке передать его
+в System.out.print()
+
+Integer.class.isInstance(<variable>)  -  returns true or false
+(так же для Double, Boolean и т.д.)
+
+byte -> short -> int -> long -> float -> double
+Результат арифметических операций с участием переменных нескольких типов - 
+переменная более "широкого" типа (с бОльшим размером), кроме случаев:
+Перед любыми арифметическими операциями с byte, char и short переменные всегда 
+приводятся к типу int:
+short a = 5, b = 10; 
+int c = a + b;
+short s = a + b; // не скомпилируется
+short s = (short)(a + b); // скомпилируется (компилятор думает что приняты все 
+                        // необходимые действия, связанные с возможным overflow)
+Числовые литералы можно присваивать переменным типа с бОльшим размером
+без явного приведения:
+short a = 5, b = 10; 
+long c = a + b;
+float d = a + b;
+
+int n = 9L; // ! не скомпилируется
+int n = 9f; // ! не скомпилируется
+
+Integer.MAX_VALUE
+Float.MAX_VALUE
+
+значения могут содержать символ '_' для повышения читабельности
+int n = 15_000_000
+float f = 30_000.1f;
+
+          - ->  primitives (примитивы)
+        /
+типы данных
+        \
+          - >  instance variables (non-static fields) - объекты (ссылочные типы)
+
+примитивы - 8 типов : int, short, float, double, boolean, char, byte, long
+
+ссылочные типы : String, ArrayList, и т.д. (в том числе обертки примитивов)
+
+обертки примитивов : Integer, Short, Float, Double, Boolean, Character, Byte, Long
+
+          - ->  локальные
+        /
+переменные
+        \
+          - >  члены класса (поля)
+
+В Java нет беззнаковых типов.
+
+Члены класса по умолчанию инициализируются null (если это объекты) и 0, false 
+(если это примитивы).
+Локальные переменные по умолчанию остаются не инициализированными.
+
+
+                      - ->  class variables (static fields)
+                    /
+переменные члены класса
+                    \
+                      - >  instance variables (non-static fields)
+
+((Object)<примитив>).getClass().getName()  -  returns String
+                                               (i.e. java.lang.Double)
+
+static methods (статический метод)  -  может быть вызван без создания
+    экземпляра класса, может возвращать статические поля и менять их
+
+static field (статическое поле) -  все экземпляры класса разделяют
+    статические поля, находящиеся в одном определенном месте в памяти.
+    К публичнымстатическим полям можно обращаться без создания 
+    экземпляра класса.
+
+final field (константное поле) - может быть инициализировано в конструкторе,
+  при объявлении, в инициализаторе класса
+
+System.gc()  -  дает Java знать, что с данный момент неплохо было бы
+    произвести сборку мусора (запустить garbage collector). Не 
+    гарантирует, что это произойдет (это остается на усмотрение Java)
+
+Сборщик мусора работает с объектами (не с примитивами). Все обхекты 
+остаются в heap (куче) до тех пор, пока не перестанут быть reachable. 
+Объект становится eligible for garbage collection (перестает быть 
+reachable) в двух случаях:
+  - Больше нет ссылок, указывающих на объект.
+  - Все ссылки на объект (переменные) стали out of scope.
+
+// Optional labels:
+OUTER_LOOP: for (int i = 0; i < 10; i++) {
+  INNER_LOOP: for (int j = 0; j < 10; j++) {
+    // ... 
+    continue OUTER_LOOP;
+    // ...
+  }
+}
+CODE_SEGMENT:
+{
+  ...
+  if (<условие>)
+    break BLOCK_SEGMENT;
+  ...
+}
+
+Конструкция SWITCH : option1, option2, и т.д. должны быть final 
+и того же типа, что и option :
+String parameter;
+final String option1 = "value 1", option2 = "value 2";
+String opt = "value";
+switch (parameter) {
+  case 5: // не скомпилируется
+  case opt: // не скомпилируется
+  case "value": // скомпилируется
+  case option1:
+    // ...
+    break;
+  case option2:
+    // ...
+    break;
+  default:
+    break;
+}
+
+ S T R I N G 
+
+String объекты являются immutable (неизменяемыми после создания), но если 
+строка не объявлена как final, можно произвести повторное присваивание и 
+ссылка будет указывать на новый объект
+String s = "str1";
+s = "str2";
+
+Конкатенация, оператор + :
+Если оба операнда числового типа - результат - число. Если хотя бы один 
+строковый, результат - строка.
+System.out.println(1 + 'a' + 2); // 100  ('a' = 97)
+System.out.println(1 + "a" + 2); // 1a2
+System.out.println(1 + 2 + 'a'); // 3a
+
+String Pool содержит все строковые литералы, используемые в программе :
+String s1 = "str"; // помещается в String Pool
+String s2 = new String("str"); // НЕ моиещается в String Pool
+
+Методы String объектов :
+length()
+charAt(int index)
+IndexOf(char ch) - номер первого совпадающего символа
+IndexOf(char ch) - номер первого совпадающего символа
+IndexOf(String str) - номер первого совпадающего начального символа строки str
+substring(int beginIndex, int endIndex)
+  System.out.println( "animals".substring(3) ); - mals
+  System.out.println( "animals".substring(3, 4) ); - m
+  System.out.println( "animals".substring(3, 7) ); - mals
+toLowerCase()
+toUpperCase()
+equals()              -  проверяет равенство другой строке
+equalsIgnoreCase()
+startsWith(String prefix)
+endsWith(String suffix)
+contains()
+replace(char oldChar, char newChar) - заменяет все oldchar в строке на newChar
+replace(charSequence oldChar, charSequence newChar) - аналогично для CharSequence
+trim() - вырезает пробелы, '\n','\t','\r' в начале и конце строки , не трогает '\r'
+
+Цепочки из методов :
+System.out.println( "abc".replace('c', 'd').toUpperCase() ); // ABD
+
+if (str1.equals(str2)) {}  -  проверяет равенство значений строк
+if (str1 == str2) {}       -  проверяет, что str1 и str2 ссылаются на один. Аналогично 
+                              для объектов всех остальных типов
+
+ S T R I N G   B U I L D E R 
+
+Класс StringBuilder - не immutable в отличие от String в отличие от операций со String
+String s = "";
+StringBuilder sb = "";
+s += "str"; // создает новый объект, "" становится eligible for garbage collection
+sb.append("str"); // не создает новый объект в отличие от операций со String
+
+StringBuilder sb = new StringBuilder("start");
+StringBuilder sb2 = sb.append("+end");
+System.out.println(sb + " " + sb2); // begin+end start+end
+
+StringBuilder s = new StringBuilder("abc");
+StringBuilder s1 = s.append("d"); // s ссылается на abcd, s1 ссылается на abcd
+s1.append("e"); // s ссылается на abcde, s1 ссылается на abcde
+  т.к. только один объект StringBulider был создан, s и s1 ссылаются на один и тот же объект
+
+StringBuilder sb = new StringBuilder(2);
+System.out.println( "size: " + sb.length() );        // size: 0
+System.out.println( "capacity: " + sb.capacity() );  // capacity: 2
+sb.append("value");
+System.out.println( "size: " + sb.length() );        // size: 5
+System.out.println( "capacity: " + sb.capacity() );  // capacity: 6
+
+Методы StringBuilder объектов :
+charAt()
+indexOf()
+length()
+substring() - возращает String 
+append(String str) - ! возвращает ссылку на StringBuilder и добавляет str к объекту
+insert(int offset, String str)
+delete(int start, int end)
+  StringBuilder sb = new StringBuilder("abc");
+  System.out.println(sb.delete(0, 2)); // c
+deleteCharAt(int index)
+reverse() - инвертирует содержимое StringBuilder
+toString() - возвращает свое значение, преобразованное в строку
+
+ A R R A Y
+
+Array  - объект. 
+Array - нумерованный список.
+
+char[] letters; // letters - ссылка на  объект Array
+char letters [];
+char letters[];
+char[] letters1 = {'a'},  // объявление нескольких массивов
+       letters2 = {'b'};
+
+.length :
+System.out.prinln( letters1.length ); // размер массива
+
+new int [] {1, 4, 6}  //  анонимный массив (anonimous array)
+int[] arr2 = arr1.clone();  // копирование массива ( с созданием нового объекта )
+
+int arr[] = new int[10];  //  заполнение массива 
+Arrays.fill(arr, 5);      //   определенным значением
+
+char [] letters = new char[3]; // инициализация массива, co всеми элементами null
+int arr[], a; // объявление массива и примитива типа одинакового типа
+char [] arr1 = new char[] {'a', 'b', 'c'}; // избыточный вариант начальной инициализации
+char [] arr2 = {'a', 'b', 'c'}; // правильный вариант начальной инициализации
+
+class A {
+  String [] arr;  // arr - null (т.к. объект член класса, независимо от того, что Array)
+}
+
+приведение типов применительно к массивам объектов (по аналогии с (short)<переменная int>):
+String [] strings = {"value"};
+Object [] objects = strings;
+String [] againStrings = objects;  // не скомпилируется
+String [] againStrings2 = (String[])objects; // скомпилируется
+
+import java.util.Arrays;
+
+Сортировка :
+String [] arr = {"def", "abc"}, numbers = {4, 10, 1};
+java.util.Arrays.sort(arr); // {"def", "abc"} -> {"abc", "def"}
+Arrays.sort(numbers); // [1, 4, 10]
+
+binarySearch(int[] a, int fromIndex, int toIndex, int key)
+binarySearch(int[] a, int key)  -  поиск в массиве. Работает для массивов int, float, String и т.д.
+Работает только для отсортированных массивов. Для неотсортированных массивов поведение 
+непредсказуемо. Возвращает индекс найденного элемента или (- (insertion_point) - 1), где 
+insertion_point - индекс места в массиве, на котором должен был бы стоять искомый элемент в 
+отсортированном массиве.
+Сложность по времени - O( log(n) )
+
+Многомерные массивы :
+int [] arr [][]; - трехмерный массив
+int [][] arr1 = { {1,2}, {3} ); // ассиметричный массив (assimetric array)
+
+for each цикл для многомерного массива:
+  for (int [] inner: arr1)
+    for (int elem : inner)
+      System.out.println(elem);
+
+ A R R A Y   L I S T 
+
+ArrayList расширяет массив по аналогии тем, как StringBulder расширяет String
+
+import java.util.ArrayList; // для использования необходим import
+(или объявление вида 
+java.util.ArrayList list; )
+ArrayList list1 = new ArrayList();
+ArrayList list2 = new ArrayList(10);
+ArrayList list3 = new ArrayList(list2);
+
+ArrayList реализует интерфейс List. ArrayList может храниться в переменной list, но не наоборот.
+List list = new ArrayList();
+List<String> anotherList = new ArrayList<String>();
+List<String> oneMoreList = new ArrayList<>();
+List<String> list2 = Arrays.asList("abc", "def"); // использует varargs
+
+Arrays.asList() возвращает FixedSizeList (? getClass().getName() выдает ArrayList)
+
+ArrayList<String> strings = new ArrayList<>();
+
+Методы ArrayList объектов :
+isEmpty()
+size()
+clear()
+add(int index, E element)  -  всегда возвращает true
+remove(int index)  - возвращает удаленный элемент
+remove(Object object)  -  удаляет первый найденный элемент object, возвращает false если 
+                           object не найден, иначе true
+contains(Object object)  -  возвращает true, если массив содержит object, иначе false
+set(int index, E newElement)  -  изменяет элемент массива, возвращает старый элемент
+get(int index);  -  возвращает элемент с индексом index
+equals(Object object)  -  проверяет на равенство другому ArrayList
+
+Элементами ArrayList могут быть объекты и не могут быть примитивы. Примитивы должны быть обернуты.
+
+Обертки примитивов :
+int -> Integer    short -> Short      boolean -> Boolean   float -> float  
+double -> Double  char -> Character   byte -> Byte         long -> Long
+
+преобразование String в примитив : Double.parseDouble("34.3535"),  Boolean.parseBoolean("true") ...
+преобразование String в обертку примитива : Float.valueOf("2.3"), Boolean.valueOf("TRUE") ...
+
+List<Float> list = Arrays.asList("def", "abc");
+Collections.sort(list);  // ["def", "abc"]       -   аналогично Arrays.sort()
+
+Autoboxing :
+автоматическое преобразование примитива в его класс-обертку
+List<float> list = new ArrayList<>();
+list.add(50.85f);  // autoboxing
+float f = list.get(0);  // автоматический unboxing
+
+unboxing значения null приведет к NullPointerException
+
+ D A T E    И    T I M E 
+
+import java.time.*;
+
+LocalDate
+LocalTime
+LocalDateTime
+! Конструкторы классов приватные.
+Классы иммутабельны.
+
+System.out.println(LocalTime.now());  // 16:37:37.060821800
+System.out.println(LocalDate.now());  // 2018-12-21
+System.out.println(LocalDateTime.now());  // 2018-12-21T16:36:08.455753900
+
+LocalDate date1 = LocalDate.of(2015, Month.JANUARY, 20);
+LocalDate date2 = LocalDate.of(2015, 1, 20);
+LocalDateTime dateTime1 = LocalDateTime.of(2015, 22, 12, 14, 30);
+LocalDateTime dateTime2 = LocalDateTime.of(2015, 22, 12, 14, 30, 30);
+LocalDateTime dateTime3 = LocalDateTime.now();
+LocalDate date = LocalDate(3, 4);
+LocalTime time = LocalTime(12, 30);
+LocalDateTime dateTime4 = LocalDateTime(date, time);
+
+LocalDate date = LocalDate.now();
+date = date.minusHours(3); // не скомпилируется (LocalDate не содержит часы)
+
+import java.time.temporal.ChronoUnit;
+LocalDate date1 = LocalDate.of(2015, 1, 15),
+          date2 = LocalDate.of(2015, 2, 15);
+System.out.println(ChronoUnit.DAYS.between(date1, date2));  // 31
+
+Period.ofYears()
+Period.ofDays()
+Period.ofWeeks()
+Period.of(1, 2, 12)
+Period period = Period.ofMonths(1);
+date1 = date1.plus(period);
+
+Методы:
+now()
+of()  // ( множество методов )
+plusMonths(long monthsToAdd)
+plusWeeks(long weeksToadd)
+plusYears(long yearsToAdd)
+minusHours(long hoursToSubtruct)
+minusSeconds(long secondsToSubtruct)
+...
+isBefore(ChronoLocalDate other)
+getDayOfYear()  // 1 ... 361 ...
+getDayOfWeek()  // MONDAY ...
+getMonth() // JANUARY ...
+getYear()
+getSecond() // 1 ... 60
+
+formatting :
+
+import java.time.format.*;
+LocalDateTime dateTime = LocalDateTime.now();
+System.out.println(dateTime.format(DateTimeFormatter.ISO_LOCAL_DATE));
+System.out.println(dateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+
+DateTimeFormatter f = DateTimeFormatter.ofPattern("YYYY / MMMM mm");
+System.out.println(dateTime.format(f));
+System.out.println(f.format(datetime)); // ! тоже работает
+
+Предопределенные форматы :
+
+LocalDate date = LocalDate.now();
+LocalDateTime dateTime = LocalDateTime.now();
+DateTimeFormatter shortDateTime =
+  DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
+System.out.println(shortDateTime.format(dateTime)); // 1/20/20
+System.out.println(shortDateTime.format(date)); // 1/20/20
+System.out.println(
+  shortDateTime.format(time)); // UnsupportedTemporalTypeException
+
+Парсинг времени и даты :
+
+DateTimeFormatter f = DateTimeFormatter.ofPattern("dd/MM/yy");
+LocalDate date = LocalDate.parse("14/12/18", f);
+LocalTime time = LocalTime.parse("06:30");
+// LocalTime time = LocalTime.parse("6:30"); // run time ошибка
+System.out.println(date + " " + time);
+
+
+М Е Т О Д Ы     И     И Н К А П С У Л Я Ц И Я
+
+метод и поле могут иметь
+
+Модификаторы доступа методов : public, private, protected, <default>
+private - доступен только в текущем классе
+protected - метод доступен всем внутри этого же пакета и в подклассах его класса в любом 
+             другом пакете
+<default> - модификатор отсутствует, метод доступен всем внутри этого же пакета
+! нет ключевого слова модификатора default
+(есть ключевое слово default дефолтного метода интерфейса)
+
+Унаследованные protected члены самого класса B, унаследованные от A будут доступны.
+! Если B наследует A, B, создать внутри B экземпляр A, его protected члены будут недоступны.
+Если создать эклемпляр B как 'A b = new B()', то private методы тоже не будут доступны.
+Если B наследует A, а C наследует B, то protected методы A не будут доступны в C.
+
+необязательные модификаторы : static, abstract, final
+! могут стоять перед модификатором доступа
+
+Указание исключений :
+public void foo() throws 
+  IllegalArgunentException, InterruptedException { }
+
+vararg должен быть последним аргументом метода
+public void foo(int... a, int... b) {};  // не скомпилируется
+
+Если не передавать vararg в метод, создастся пустой массив
+public void foo(int... args) { }
+...
+foo( new int[] {1, 2} );
+
+Static поля классов существуют в одном экземпляре независимо от количества экземпляров класса.
+К static членам можно обращаться без создания экземпляра класса. 
+! К static членам переменной класса можно обращаться даже если она равна null.
+! Static члены не могут обращаться к instance членам.
+
+! final не запрещает вызывать метод добавления нового элемента. Применительно к ссылкам
+final запрещает ссылаться в дальнейшем на другой объект.
+static final ArrayList<String> list = new ArrayList<>();
+public static void main() {
+  list.add("new");
+}
+
+! instance initializer (инициализатор экземпдяра) - блок {} снаружи методов класса - 
+выполняется при создании экземпляра класса
+
+! static initializer (инициализатор класса) - выполнаяется при объявлении класса
+! Static поля могут быть инициализированы в инициализаторе класса , но не могут быть 
+ изменены если уже были инизиализированы.
+
+! static import - импорт статических членов класса
+import static java.util.Arrays.asList;
+
+! Все примитивы передаются в методы по значению. При передаче ссылочных типов в метод
+ объект не копируется, создается новая ссылка на этот объект. Если, например, вызвать 
+ метод append объекта StringBuilder, то он изменится.
+
+В перегружаемых (overload) методах могут быть разные модификаторы и возвращаемые значения. Параметры
+должны различаться.
+
+Перегрузка методов с varargs :
+void void fly(String... args) {};
+void void fly(String[] args) {}; // не скомпилируется, т.к. уже есть метод с такой 
+                                     сигнатурой (varargs преобразуется в массив)
+
+public static void foo(Long l) { }
+public static void foo(Long... args) { } 
+public static void main(String... args) {
+  foo(4);  // ! не скомпилируется, т.к. int нельзя привести сразу к Long (сначала к long)
+  foo(4L);
+}
+
+! вызов конструктора из другого конструктора (this() должен быть первым вызовом  
+ в конструкторе) :
+int n;
+public Test() { this(10); }
+// public Test(boolean f) { System.println(); this(10); } // не скомпилируется
+public test(int n) { this.n = n; }
+public static void main(String[] args) { 
+  Test test = new Test();
+}
+
+! Порядок инициализации :
+1. Инициализация суперкласса 
+2. Инициализация static полей при объявлении и статические инициализаторы
+3. Инициализация instance полей при объявлении и инициализаторы
+4. Конструктор
+! instance инициализаторы вызываются только при создании экземпляра класса
+
+Immutable классы :
+- нет сеттеров
+- начальная инициализация полей (значений) с помощью конструктора
+- если поле immutable класса неиммутабельно, то геттер должен возвращать
+  либо копию этого поля, либо приводить поле к иммутабельному типу 
+  ( например StringBuilder.toString() ) 
+
+
+L A M B D A S 
+(arrow functions, closures, lambdas)
+
+a -> a.value
+a -> { return a.value}   - return обязателен, т.к. есть { }
+(a, b) -> a.value        - скобки обязательно, т.к. более одного параметра
+
+! Лямбды работают с интерфейсами в которых объявлен только один абстрактный 
+ метод - функциональными интерфейсами
+
+Предикаты :
+import java.util.funtion.Predicate;
+
+public interface Predicate<T> {
+  boolean test(T t);
+}
+
+Вместо функционального интерфейса можно использовать предикат. Если передавать 
+в функцию лямбду как параметр типа Predicate<FooClass> checker, то лямбда будет 
+"имплементировать" метод test предиката (срабатывать при его вызове) :
+
+
+private static void bar(Predicate<FooClass> checker)
+  ...
+  if (checker.test(fc)) { ... }
+  ...
+}
+...
+public static void main(String[] args) {
+  FooClass fc = new FooClass;
+  bar(fc -> { if (fc.value == 10) return true; else return false;} );
+}
+
+C L A S S E S 
+
+модификаторы доступа членов класса :
+public
+protected
+package-private (default)
+private
+
+Класы не могут наследовать более одного класса (в java нет множественного наследования) 
+! Но классы могут имплементировать несколько интерфейсов.
+
+final class - не может иметь потомков
+
+Java разрешает объявление только одного public класса или интерфейса в одном файле
+
+java.lang.Object не имеет родительсвого класса.
+Компилятор автоматически подставляет к любому классу extends java.lang.Object ( если
+extends отсутствует ), т.о. все классы являются прямыми или косвенными потомками Object.
+
+this( <аргументы> ) - вызов другого конструктора этого же класса
+super( <аргументы> ) - вызов конструктора суперкласса - для передачи ему параметров 
+Первое выражение любого конструктора - либо вызов super() либо вызов this() с параметрами
+или без. При вызове this(), super() должен переноситься в него.
+"Пустой" конструктор создается по умолчанию. Если конструктор суперкласса не имеет 
+параметров, то он вызывается по умолчанию ( super() ).
+
+! Если у родительского класса нет конструктора без параметров, а в классе-потомке
+не вызывается родительский конструктор, то код не будет компилироваться.
+
+При переопределении (override) сигнатура должна оставаться такой же как в родительском классе.
+Тип возвращаемого значения должен быть таким же или более 'узким'
+Для контроля переопределения методов компилятором нужно использовать аннотацию  @override
+Аннотация override позволяет отслеживать ошибки программиста (помеченный как o@override метод,
+не являщийся переопределяющим, не скомпилится)
+
+!! В java класс не может содержать двух функций с одинаковыми параметрами и названием, но
+разными возвращаемыми значениями
+
+К полям и методвм родительского класса можно обращаться как super.<член класса>. Если 
+дочерий класс переопределяет метод родителя, this.<метод>() и super.<метод>() могут 
+иметь совсем разный эффект.
+
+! Ограничения при переопределении методов :
+- Переопредеялемый метод должен иметь такой же или более широкий уровень доступа
+- Переобпределяемый метод не может бросить новое исключение или исклюяение более 
+широкого класса по отношению к родительскому классу
+- Возвращаемое значение переопределяемого метода может быть либо такого же класса,
+как и в родительском классе, либо его подкласса
+
+! private метод foo() дочернего класса с теми же параметрами, что и у метода foo() 
+родительского класса, не является переопределяемым, в отличие от public и protected.
+
+hidden метод - переопределенный статический метод.
+! статический метод не может переопределять нестатический метод (и наоборот)
+
+final метод - не может быть переопределен
+
+hidden поле - заново объявленное в классе-потомке (не связано со static в отличие от 
+              hidden методов)
+
+! Абстрактный класс (abstract) - нельзя создать сущность
+ (can't be instantiated)
+
+Абстрактный класс не обязательно должен содержать абстрактные методы
+и может содержать неабстрактные методы. 
+Абстрактные методы могут быть только в абстрактных классах.
+Только абстрактные классы могут содержать абстрактные методы.
+
+abstract void swim() { }; - не скомпилируется.
+void swim(); - не скопмилируется без abstract
+
+Абстрактный класс и абстрактный метод не могут быть final.
+Класс не может быть одновременно абстрактным и final.
+
+'Первый' конкретный класс должен имплементировать все неимплементированные 
+абстрактные методы его родительских абстрактных классов.
+
+Абстрактные классы не обязаны имплементирвать абстрактные методы абстрактных
+родительских классов.
+
+
+Интерфейс - содержит только абстрактные, static, default (специальное ключевое слово для 
+интерфейса) методы.
+Интерфейс может наследоваться (extends) другим интерфейсом или имплементироваться (implements) 
+каким-либо абстрактным или конкретным классом 
+(абстрактный класс не может наследовать интерфейс)
+
+Поля интерфейсов могут быть только static, public и final, по умолчанию static, public и final 
+(ключ. слова static и public не обязательны)
+Их значения должны быть заданы при объявлении
+
+Методы интерфейса могут быть только public (по умолчанию public). 
+Методы интерфейса могут быть static. при этом они не наследуются подклассами и должны быть 
+имплементированы внутри интерфейса.
+default (спец. ключ. слово для default методов интерфейса). Классы, имплементирующие интерфейс 
+не обязаны переопределять default методы интерфейса (будет использоваться имплементация метода 
+внутри интерфейса).
+При переопределении методов интерфейса в имплементирующем классе можно использовать аннотацию 
+@override как и при переопределении методов классов
+Default методы интерфейса должны быть имплементированы внутри интерфейса.
+! default в данном случае - это не модификатор доступа (default методы интерфейса тоже public).
+default метод интерфейса не может быть static, final или abstract.
+
+! Класс не может имплементировать 2 интерфейса, содержащих default методы с одинаковой сигнатурой
+(одинаковыми названием и параметрами), если он не переопределяет этот default метод
+
+Интерфейсы могут быть только public и default
+
+
+П О Л И М О Р Ф И З М   И   П Р И В Е Д Е Н И Е   Т И П О В   О Б Ъ Е К Т О В
+(casting)
+Полиморфизм :
+Переменной типа интерфейс и типа суперкласса какого-либо класса, наследующего этот суперкласс и 
+имплементирующего этот интерфейс, может быть присвоен объект этого класса.
+
+Lemur lemur = new Lemur();
+Object obj = lemur; // теперь нет доступа к членам класса Lemur, но объект в памяти не изменился
+Lemur lemur1 = obj; - не скомпилируется
+Lemur lemur2 = (Lemur)obj; // явное (explicit) приведение обратно к Lemur
+! тип ссылки важен для того какие методы объекта мы хотим использовать.
+Множество ссылок разных типов может указывать на один и тот же объект.
+
+Приведение к суперклассу может быть неявным.
+Приведение к подклассу должно быть явным.
+При попытке приведения к типам объектов, которые не находятся в иерархических отношениях, 
+то компилятор выдаст ошибку.
+При непраильном приведении искоючение может возникнуть в runtime а не при компиляции.
+
+// ... Panda extends Bear ...
+Bear bear = new Bear();
+Panda panda = (Panda)bear; - ClassCastException в runtime т.к. объект, на который указывает bear
+                             не является сущностью Panda
+
+Чтобы исколючить ClassCastException, можно проверить принадлежность объекта классу с пом. instanceof
+if (bear instanceof Panda) {
+  Panda panda = (Panda)bear;
+}
+
+virtual метод - реализация становится известна во время выполнения (runtime)
+Все не-final, не-static, не-private методы в java - виртуальные, т.к. все они могут быть переопределены
+в runtime.
+! Если в подклассе переопределен какой-либо метод, то при вызове этого метода из объекта подкласса, 
+доступного по ссылке на суперкласс, вызовется переопределенный метод
+
+polymorphic parameters:
+Применение полиморфизма - если метода имеет параметр типа интерфейс или объект какого-то класса, то можно 
+передавать в качестве этого параметра сущности классов, имплементирующих этот интерфейс или наследующих 
+этот класс. (И внутри метода использовать переопределенные методы)
+
+Ограничение при переопределении (override), говорящее о том, что переопреленный метод должен иметь такой же или
+более широкий модификатор доступа связано с тем, что при использовании полиморфизма при передаче параметров 
+методов должен сохраняться доступ к переопределяемым методам.
+
+
+<объект> instanceof <класс>   -   возвращает true, если объект
+                                  является сущностью <класса>
+
+class A () { }
+System.out.println( ((Object)A).getClass().getName() );  //  выведет A, а не Object
+System.out.println( ((Object)A) instanceof Object);  //  выведет true
+
+Если <объект> в принципе не может принадлежать <классу>, компилятор выдаст ошибку.
+
+  Но такой код скомпилируется :
+
+HeavyAnimal hippo = new Hippo();
+boolean b6 = hippo instanceof Mother;
+
+  потому что в дальнейшем может существовать класс :
+
+class MotherHippo extends Hippo implements Mother { }
+
+
+
+И С К Л Ю Ч Е Н И Я
+                                              -> java.lang.Exception   ->  java.lang.RuntimeException ( unchecked )
+                                            / 
+  java.lang.Object -> java.lang.Throwable -  - > java.lang.Error
+
+
+unchecked исключения - например, исключения во время арифметических операций, т.е. те, которые не обрабатываются
+во время компиляции
+
+checked - обязательно должны обрабатываться или объявляться ( <метод> throws ... )
+
+try {
+ ...
+} catch (Exception e) {
+ ...
+} finally //   -   ! гарантированно выполнится, даже если в catch есть оператор return
+                   ! но если в catch есть System.exit(int) - finally не вызывается
+
+Должен присутствовать хотя бы один из catch и finally блоков
+
+! если в try - catch блоке обрабатываются несколько исключений, наследующих друг друга, то сначала должны 
+обрабатываться более узкие классы исключений
+
+try {
+  throw new RuntimeException();         -     если бы не было finally, бросилось бы RuntimeException,
+} catch (RuntimeException e) {                а так - MyException, для избежания игнорирования исключений
+  throw new RuntimeException();               в catch блоке используют еще один try - catch в finally блоке
+} finally {
+  throw new MyException();
+}
+
+Runtime исключения :
+
+ArithmeticException               -  деление на ноль (JVM)
+ArrayIndexOutOfBoundsException    -  выход за пределы границ массива (JVM)
+ClassCastException                -  ошибка во время преобразования типа объекта(JVM)
+  String type = "moose";
+  Object obj = type;
+  Integer number = (Integer) obj;
+IllegalArgumentException          -  в метод передеан неверынй аргумент (программист)
+  public Card(String rank, String suit) {
+    if (r == null || s == null)
+      throw new IllegalArgumentException(); 
+    // ...
+  }
+NullPointerException              -  null вместо ссылки на объект (JVM)
+NumberFormatException             -  при попытке преобразования строки в число строка имеет неподходящий формат 
+                                     (программист)
+
+Checked исключения :
+
+IOException             -  ошибка при чтении/записи файла
+FileNotFoundException   -  файл не найден
+
+Error исключения :
+ 
+ExceptionInInitializerError  -  необработанное исключение в статическом инициализаторе (JVM)
+StackOverflowError           -  переполнение стэка (бесконечная рекурсия) (JVM)
+NoClassDefFoundError         -  класс доступен на этапе компиляции, но не доступен в runtime
+
+System.out.println(e);
+System.out.println(e.message);
+e.printStackTrace();
+
+
+
+
