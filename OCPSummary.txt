@@ -2923,7 +2923,7 @@ PrintStream и PrintWriter не бросают IOException. Вместо это�
 BufferedWriter, FileWriter и FileOutputStream. При указывании файла напрямую в PrintWriter нельзя
 задать кодировку и установть режим append.
 
-{{ Чтение пользовательских данных }}
+{{ Получение данных от пользователя }}
 Устаревший способ :
   try ( BufferedReader reader = new BufferedReader(
           new InputStreamReader(System.in)) ) {
