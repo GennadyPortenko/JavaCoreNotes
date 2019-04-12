@@ -385,7 +385,7 @@ lazy instantiation синглтона :
 5. не предоставлять другим классам и пользователю доступ к изменяемым (например, ArrayList) 
    объектам-членам Immutable класса (не возвращать их вообще или возвращать их копию. Или, 
    например, использовать Collections.unmodifiableList() метод).
-   При присваивании к конструкторе членам класса mutable объектов должны создаваться новые 
+   При присваивании в конструкторе членам класса mutable объектов должны создаваться новые 
    экземпляры этих объектов.
 
 Изменять immutable объекты по определению нельзя, но можно создать новые объекты, имеющие 
@@ -894,7 +894,7 @@ java.util.Collections.sort, java.util.Collections.binarySearch().
     }
   }
 
-Comparator в отличие от Comparable обычно используется с лямбда выражениями :
+! Comparator в отличие от Comparable обычно используется с лямбда выражениями :
   ...
   Comparator<A> byAge = (a1, a2) -> { return a1.getAge() - a2.getAge(); };
     или
@@ -1299,18 +1299,18 @@ upon or closed'
                                                             Если стрим пуст, возвращает Optional.empty.
                                                             Если в стриме один элемент, вернет его в Optional
   ? 3. <U> U reduce(U identity, BiFunction<U, ? super T, U> accumulator, BinaryOperator<U> combiner)
-Аналогия со String :
+  Аналогия со String :
   String[] array = new String[] { "w", "o", "l", "f" };
   String result = "";
   for (String s: array) result = result + s;
-Пример использования reduce() :
-  // 1
+  Пример использования reduce() :
+   // 1
   Stream<String> stream = Stream.of("J", "A", "V", "A");
   String result = stream.reduce("", (s1,s2) -> s1 + s2);  // JAVA
-  // 2
+   // 2
   Stream<Integer> stream = Stream.of(4, 5, 10);
   stream.reduce((n1, n2) -> n1 * n2).ifPresent(System.out::println); // 200
-  // 3
+   // 3
   Set<Integer> resultSet = Arrays.asList(1, 2, 3, 4).stream()
     .reduce( new HashSet<Integer>(), 
              (set, e1) -> { set.add(e1); return set; }, 
@@ -1321,8 +1321,8 @@ upon or closed'
   2. <R, A> collect(Collector<? super T, A, R> collector)
   R - тип mutable объекта, в который сохраняются данные, T - тип элемента стрима
   combiner нужен для объединения двух mutable объектов (при многопоточной обработке)
-Пример использования collect() :
-  // 1
+  Пример использования collect() :
+   // 1
   Stream<String> stream = Stream.of("w", "o", "l", "f");
   StringBuilder word = stream.collect(StringBuilder::new, StringBuilder::append, StringBuilder::append);
   //  в данном примере со StringBuilder у accumulator и collector одинаковая реализация
@@ -1331,7 +1331,7 @@ upon or closed'
   Set<String> set = stream2.collect(TreeSet::new, TreeSet::add, TreeSet::addAll);
   System.out.println(set); // [f, l, o, w]
 
-  // 2  -  использует предопределенные аккумуляторы-комбайнеры - коллекторы :
+   // 2  -  использует предопределенные аккумуляторы-комбайнеры - коллекторы :
   Stream<String> stream = Stream.of("w", "o", "l", "f");
   TreeSet<String> set = stream.collect(Collectors.toCollection(TreeSet::new));
   System.out.println(set); // [f, l, o, w]
@@ -1339,6 +1339,8 @@ upon or closed'
   Stream<String> stream = Stream.of("w", "o", "l", "f");
   Set<String> set = stream.collect(Collectors.toSet());
   System.out.println(set); // [f, w, l, o]
+
+  Создание собственного коллектора - через Collector.of()
 
 Промежуточные операции :
 
@@ -1511,7 +1513,7 @@ LongSummaryStatistics и DoubleSummaryStatistics. getCount() всегда воз
 
 {{ Chaining применительно к Optional }}
 
-Некоторые промежуточные операции над стримами могуи применяться также к Optional :
+Некоторые промежуточные операции над стримами могут применяться также к Optional :
 map(), filter() :
   Optional.of("Tom").filter(s -> s.length() > 2).ifPresent(System.out::println);  // filter()
   Optional.of("Tom").map(s -> s.length()).ifPresent(System.out::println); // map()
@@ -2047,9 +2049,9 @@ Closeable - устаревший аналог AutoCloseable, обязывает 
   public class Test {
     public static void main(String... args) {
       try ( IOObj io = new IOObj() ) {
-        throw new IllegalStateException("Illegal State!");         // > java Test
-      } catch (IllegalStateException e) {                          // > Illegal State!
-        System.out.println(e.getMessage());                        // > suppressed exception found
+        throw new IllegalStateException("Illegal State!");
+      } catch (IllegalStateException e) {
+        System.out.println(e.getMessage());
         for (Throwable se : e.getSuppressed()) {
           System.out.println("suppressed exception found");
         }
@@ -2079,7 +2081,7 @@ Closeable - устаревший аналог AutoCloseable, обязывает 
 
 Assertion бросает AssertionError если утверждение равно false.
 
-Assertions включаются ключом -enableassertions иои -ea :
+Assertions включаются ключом -enableassertions или -ea :
   > java -ea Test
 Включение assertions для классов пакета com.test :
   > java -ea:com.test... Test
@@ -2389,7 +2391,7 @@ Atomic методы :
 
 {{ synchronized }}  -  блок кода, который может выполняться максимум одним потоком в конкретный момент времени
  synchronized (<монитор>) { <код> }
- В качестве монитора можно использовать объект или final поле объекта.
+ В качестве монитора можно использовать класс, объект или final поле объекта.
 
 Пример использования synchronized :
   public class Test {
@@ -2543,7 +2545,7 @@ ordered операции, такие как .findFirst(), даже после un
 и в последовательных стримах (вначале упорядочивают элементы).
 
 ! .unordered() - не меняет порядок элементов, а просто говорит JVM, что при выполнении ordered операций порядок можно 
-игнорировать. unordered() никак не влияет на работу полседовательных стримов, но может существенно увеличить производительность
+игнорировать. unordered() никак не влияет на работу последовательных стримов, но может существенно увеличить производительность
 параллельных стримов ( ... .stream().unordered.parallel() ... )
 
 {{ Stateful и Stateless операции параллельных стримов }} ?
@@ -2959,7 +2961,7 @@ NIO.2 позволяет загружать данные файлов в буф�
   Path path2 = Paths.get("C:/data/gprt/java/test/test.txt");
   Path path3 = Paths.get("C:","data", "gprt", "java", "test", "test.txt");
 
-  URI - бросает URISyntaxException :
+  URI (Uniform Resource Identifier) - бросает URISyntaxException :
     import java.net.URI;
     import java.net.URISyntaxException;
      ...
@@ -3093,7 +3095,7 @@ Files.walk( Path ) - возвращает Stream<Path> :
   try {
     Files.walk(path).filter(p -> p.toString().endsWith(".java"))
       .forEach(System.out::println);
-  } catch (IOException e) { System.out.println("Exception : " + e.getMessage()); }
+  } catch (IOException e) { e.printStackTrace(); }
 
 walk() по умолчанию не переходит по символьным ссылкам на директории чтобы избежать зацикливания, но это можно 
 изменить передав ему в качестве varargs FOLLOW_LINKS.
@@ -3104,13 +3106,13 @@ walk() по умолчанию не переходит по символьным
     try {
       Files.find(root, 10, (path, attr) -> 
         (path.toString().endsWith("java") && attr.isDirectory()) ).forEach(System.out::println);
-    } catch (IOException e) { System.out.println("Exception : " + e.getMessage()); }
+    } catch (IOException e) { e.printStackTrace(); }
 
   Files.list( Path ) - возвращает стрим файлов директории :
     Path path = Paths.get("D:/gprt/java");
     try {
       Files.list(path).filter( p -> !Files.isDirectory(p) ).forEach(System.out::println);
-    } catch (IOException e) { System.out.println("Exception : " + e.getMessage()); }
+    } catch (IOException e) { e.printStackTrace(); }
   
   FIles.lines( Path ) - возвращает стрим строк файла :
     Files.lines(Paths.get("file.txt")).forEach(System.out::println);

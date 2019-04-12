@@ -8,26 +8,25 @@ ArrayList, методы
 автобоксинг
 инициализаторы, статические инициализаторы
 перегрузка, переопредение
-static, abstract, hidden, vitual
+static, abstract, hidden, virtual
 интерфейс
 кастинг, полиморфизм
 вложенные классы
 анонимные классы
 фабричный метод
 синглтон
-билдер
 immutable object design pattern
 builder design pattern
 generics классы
 generics методы
 wildcards
 Collection, методы
-Все коллекции, методы
+Все коллекции, методы, общие методы
 Comparable, Comparator, .sort()
 функциональный интерфейс
-встроенные фугкциональные интерфейсы
+встроенные функциональные интерфейсы
 лямбда-выражения
-method reference (ссфлка на метод)
+method reference (ссылка на метод)
 Optional
 Stream (стримы), pipeline, методы(операции)
 стримы примитивов
