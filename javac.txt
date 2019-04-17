@@ -1,0 +1,4 @@
+javac Test.java  -  создаст Test.class и все остальные .class файлы
+java Test        -  запуск
+
+jar tf <package_name>.jar  -  вывести содержимое jar-архива (включая .class файлы)

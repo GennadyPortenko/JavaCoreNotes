@@ -1,4 +1,4 @@
-# Java OCA / OCP Study Guide summary
+# Java Core Notes
 
-Main concepts of Java Core and what I think is important to memorize.
+Main concepts of Java Core and the most important things to memorize.
 
