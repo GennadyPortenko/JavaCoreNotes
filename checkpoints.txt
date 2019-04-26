@@ -1,70 +1,70 @@
-методы Object (equals(), hashCode() ...)
-массив, многомерный массив
-enum, методы
-String, методы
-StringBuilder, методы
-StringBuffer
-ArrayList, методы
-автобоксинг
-инициализаторы, статические инициализаторы
-перегрузка, переопредение
-static, abstract, hidden, virtual
-интерфейс
-кастинг, полиморфизм
-вложенные классы
-анонимные классы
-фабричный метод
-синглтон
-immutable object design pattern
-builder design pattern
-generics классы
-generics методы
-wildcards
-Collection, методы
-Все коллекции, методы, общие методы
-Comparable, Comparator, .sort()
-функциональный интерфейс
-встроенные функциональные интерфейсы
-лямбда-выражения
-method reference (ссылка на метод)
-Optional
-Stream (стримы), pipeline, методы(операции)
-стримы примитивов
-функциональные интерфейсы для примитивов
-коллекторы стримов и стримов примитивов
-исключения
-try-with-resources
-suppressed-исключения
-assertions
-Runnable
-Callable
-ExecutorService
-ScheduledExecutorService
-Future
-CachedThreadPool
-ScheduledThreadPool
-FixedThreadPool
-Atomic, методы
-synchronized
-concurrent коллекции
-synchronized коллекции
-параллельные стримы, stateful, stateless операции
-CyclicBarrier
-Fork/join framework
-File
-стримы данных, методы
-сериализация, Serializable
-transient
-PrintStream, PrintWriter, получение данных от пользователя
-Path, методы 
-walk
-JDBC
-
-
-LocalDate, LocalTime, ...
-Period
-Duration
-Instant
-DateTimeFormatter
-Localization
-
+   методы Object (equals(), hashCode() ...)
+   массив, многомерный массив
+   enum, методы
+   String, методы
+   StringBuilder, методы
+   StringBuffer
+   ArrayList, методы
+   автобоксинг
+   инициализаторы, статические инициализаторы
+   перегрузка, переопредение
+   static, abstract, hidden, virtual
+   интерфейс
+   кастинг, полиморфизм
+   вложенные классы
+   анонимные классы
+   фабричный метод
+   синглтон
+   immutable object design pattern
+   builder design pattern
+   generics классы
+   generics методы
+   wildcards
+   Collection, методы
+   Все коллекции, методы, общие методы
+   Comparable, Comparator, .sort()
+   функциональный интерфейс
+*  встроенные функциональные интерфейсы
+   лямбда-выражения
+   method reference (ссылка на метод)
+   Optional
+   Stream (стримы), pipeline, методы(операции)
+   стримы примитивов
+   функциональные интерфейсы для примитивов
+   коллекторы стримов и стримов примитивов
+   исключения
+   try-with-resources
+   suppressed-исключения
+   assertions
+*  Runnable
+*  Callable
+*  ExecutorService
+*  ScheduledExecutorService
+*  Future
+*  CachedThreadPool
+   ScheduledThreadPool
+*  FixedThreadPool
+*  Atomic, методы
+*  synchronized
+*  concurrent коллекции
+   synchronized коллекции
+   параллельные стримы, stateful, stateless операции
+   CyclicBarrier
+*  Fork/join framework
+   File
+   стримы данных, методы
+   сериализация, Serializable
+   transient
+   PrintStream, PrintWriter, получение данных от пользователя
+   Path, методы 
+   walk
+   JDBC
+   
+   
+   LocalDate, LocalTime, ...
+   Period
+   Duration
+   Instant
+   DateTimeFormatter
+   Localization
+   
