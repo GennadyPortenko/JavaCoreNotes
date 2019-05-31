@@ -5,19 +5,22 @@
 @Inherited
 @Documented  -  включает аннотацию в JavaDoc (пол умолчанию - не включена)
 @Repetable  -  может применяться несколько раз к одному и тому же элементу
+@Constraint  -  определяет класс для валидации аннотированных данынх
 
-@Retention(RetentionPolicy.RUNTIME)   -  по умолчанию RetentionPolicy.CLASS
- RetentionPolicy.SOURCE  -  НЕ видна на этапе компиляции и в runtime
- RetentionPolicy.CLASS  -  видна на этапе компиляции
- RetentionPolicy.RUNTIME  -  видна на этапе компиляции и в runtime
+  @Retention(RetentionPolicy.RUNTIME)   -  по умолчанию RetentionPolicy.CLASS
+   RetentionPolicy.SOURCE  -  НЕ видна на этапе компиляции и в runtime
+   RetentionPolicy.CLASS  -  видна на этапе компиляции
+   RetentionPolicy.RUNTIME  -  видна на этапе компиляции и в runtime
+  
+  @Target({ElementType.CONSTRUCTOR, ElementType.METHOD})
+   ElementType.ANNOTATION_TYPE
+   ElementType.METHOD
+   ElementType.CONSTRUCTOR
+   ElementType.FIELD
+   ElementType.LOCAL_VARIABLE
+   ElementType.PACKAGE
+   ElementType.PARAMETER
+   ElementType.TYPE   (класс)
 
-@Target({ElementType.CONSTRUCTOR, ElementType.METHOD})
- ElementType.ANNOTATION_TYPE
- ElementType.METHOD
- ElementType.CONSTRUCTOR
- ElementType.FIELD
- ElementType.LOCAL_VARIABLE
- ElementType.PACKAGE
- ElementType.PARAMETER
- ElementType.TYPE   (класс)
+  @Constraint(validatedBy = CustomValidator.class)
 
