@@ -791,7 +791,7 @@ Map не имплементирует Collection
 
 LinkedHashMap  -  позволяет сохранять порядок добавления элементов
 
-TreeMap  -  хранит элементы в отсортированном дереве, при этом добавление и получение значений занимает O(1)
+TreeMap  -  хранит элементы в отсортированном дереве, при этом добавление и получение значений занимает O(log(n))
             имплементирует SortedMap
 
 Hashtable  -  устаревш. аналог HashMap
@@ -1429,7 +1429,7 @@ upon or closed'
 Методы стримов примитивов :
 Source операции :
   range(from, to)
-  closedRange(from, to)
+  rangeClosed(from, to)
 Intermediate операции :
   map()  -  преобразует элементы стрима в элементы того же типа :
     DoubleStream.of(3, 5 ).map(d -> d + 1).forEach(System.out::println); // 4.0  6.0
